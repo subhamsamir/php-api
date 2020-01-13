@@ -7,7 +7,7 @@ switch ($request_method){
         response(doGet());
     break;
     case "POST":
-        doPost();
+        response(doPost());
     break;
     case "PUT":
         doPut();
@@ -18,6 +18,14 @@ switch ($request_method){
 }
 
 function doGet(){
+    if (@$_GET['id']){
+        @$id = $_GET['id'];
+        $where = "WHERE `id`=".$id;
+    }
+    else {
+    $id = 0;
+    $where = "";
+    }
     $dbconnect  = mysqli_connect("localhost", "root", "", "api");
     $query      = mysqli_query($dbconnect, "SELECT * FROM `emp`");
     while ($data = mysqli_fetch_assoc($query)){
@@ -28,8 +36,22 @@ function doGet(){
     //echo "get method cal lled";
 }
 
-function doPost(){
-    echo " post method called";
+function doPost()
+{
+   if ($_POST)
+   {
+       $dbconnect   =   mysqli_connect("localhost", "root", "", "api");
+       $query       =   mysqli_query($dbconnect, "INSERT INTO `emp` (`emp_name`, `emp_status`) VALUES ('" . $_POST['emp_name'] . "','".$_POST['emp_status']."')");
+   if ($query == true)
+   {
+       $response = array("message"=>"success");
+   }
+   else {
+        $response = array("message"=>"failed");
+        }
+     echo " post method called";
+}
+return $response;
 }
 
 function doPut(){
@@ -42,6 +64,6 @@ function doDelete()
 }
 
 function response($response){
-    echo json_encode($response);
+    echo json_encode(array ("status"=>"200","data"=>$response));
 }
 ?>
