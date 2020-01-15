@@ -27,7 +27,7 @@ function doGet(){
     $where = "";
     }
     $dbconnect  = mysqli_connect("localhost", "root", "", "api");
-    $query      = mysqli_query($dbconnect, "SELECT * FROM `emp`");
+    $query      = mysqli_query($dbconnect, "SELECT * FROM `emp`".$where);
     while ($data = mysqli_fetch_assoc($query)){
         $response[] = array("emp_id"=>$data['id'], "emp_name"=>$data['emp_name']);
     }
